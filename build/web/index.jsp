@@ -136,7 +136,8 @@
                     },
                     success:function(url){
                         var js = JSON.parse(url)
-                        download(js.url,js.filename)
+                        console.log(js)
+                       // download(js.url,js.filename)
                     }
                 })
             }
@@ -203,13 +204,23 @@
                                         savefile()
                                     }
                                 },
-                                
+                                {
+                                    extend: 'csv',
+                                    text: 'Export csv',
+                                    charset: 'utf-8',
+                                    extension: '.csv',
+                                    fieldSeparator: ';',
+                                    fieldBoundary: '',
+                                    filename: 'export',
+                                    bom: true
+                                },
                                 'excel'
                             ],
                             data: json.data,
                             columns:json.datacol,
                             scrollX: true,
-                            destroy: true
+                            destroy: true,
+                            order: [[3,'asc']]
                         } );
                     }
                 })

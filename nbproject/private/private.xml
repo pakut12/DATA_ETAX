@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/1"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/1">
+        <file>file:/C:/Users/pakutsing/Desktop/Github/DATA_ETAX/src/java/Servlet/Etax.java</file>
+        <file>file:/C:/Users/pakutsing/Desktop/Github/DATA_ETAX/src/java/model/MD_Etax.java</file>
+        <file>file:/C:/Users/pakutsing/Desktop/Github/DATA_ETAX/src/java/service/EtaxService.java</file>
+        <file>file:/C:/Users/pakutsing/Desktop/Github/DATA_ETAX/src/java/service/SapService.java</file>
+        <file>file:/C:/Users/pakutsing/Desktop/Github/DATA_ETAX/src/java/utility/ConnectDB.java</file>
+        <file>file:/C:/Users/pakutsing/Desktop/Github/DATA_ETAX/web/index.jsp</file>
+    </open-files>
 </project-private>

@@ -10,6 +10,7 @@ import java.util.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import model.MD_Etax;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import service.EtaxService;
 import service.SapService;
@@ -66,13 +67,22 @@ public class Etax extends HttpServlet {
                     String HDOCTYPE = request.getParameter("HDOCTYPE").trim();
 
                     List<MD_Etax> listetax = EtaxService.GetAllListEtax(BUKRS, LBLDAT, HBLDAT, LKUNRG, HKUNRG, LBRNCH, HBRNCH, LDOCTYPE, HDOCTYPE);
-                    String url = EtaxService.SaveCsvEtax(listetax);
-                    String filename = url.replace("file/", "");
+                    List<List<String>> list = EtaxService.SaveCsvEtax(listetax);
 
+                    JSONArray arr = new JSONArray();
+                    for (List<String> LS : list) {
+                        arr.put(LS);
+                    }
+                    
+                    JSONObject obj = new JSONObject();
+                    obj.put("data", arr);
+                   
+                    //String filename = url.replace("file/", "");
+/*
                     JSONObject obj = new JSONObject();
                     obj.put("url", url);
                     obj.put("filename", filename);
-                    
+                     */
                     out.print(obj);
 
                 } catch (Exception e) {

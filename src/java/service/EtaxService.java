@@ -8,6 +8,7 @@ import com.sap.mw.jco.IFunctionTemplate;
 import com.sap.mw.jco.JCO;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -209,27 +210,25 @@ public class EtaxService {
         }
     }
 
-    public static String SaveCsvEtax(List<MD_Etax> etax) throws IOException, SQLException {
-
+    public static List<List<String>> SaveCsvEtax(List<MD_Etax> etax) throws IOException, SQLException {
 
         String url = "";
+        List<List<String>> list = new ArrayList<List<String>>();
+
         try {
 
-            String path = pathlocal + "DATA_ETAX_" + Utility.getdatetoday() + ".csv";
+            String path = pathlocal + "DATA_ETAX_" + Utility.getdatetoday() + ".txt";
             FileWriter writer = new FileWriter(path);
 
             List<MD_Etax> Groupdata = Groupdata(etax);
             List<String> docid = getSumDoc(etax);
 
-            System.out.println(Groupdata.size());
-            System.out.println(docid.size());
-
             for (String id : docid) {
-                System.out.println(id);
                 for (MD_Etax listdata : Groupdata) {
                     if (listdata.getDOCID().equals(id)) {
                         List<String> datarow = getDataByDataType(listdata);
-                        writeLine(writer, datarow);
+                        list.add(datarow);
+                    // writeLine(writer, datarow);
                     }
                 }
             }
@@ -238,17 +237,22 @@ public class EtaxService {
             List<String> datatypeT = new ArrayList<String>();
             datatypeT.add("T");
             datatypeT.add(String.valueOf(docid.size()));
-            writeLine(writer, datatypeT);
+            list.add(datatypeT);
+            // writeLine(writer, datatypeT);
 
 
+            // writer.flush();
+            //writer.close();
 
             url = "file/DATA_ETAX_" + Utility.getdatetoday() + ".csv";
+
+
         } catch (Exception e) {
             e.printStackTrace();
             url = "";
         }
 
-        return url;
+        return list;
     }
 
     private static List<MD_Etax> Groupdata(List<MD_Etax> etax) {
@@ -274,6 +278,13 @@ public class EtaxService {
         }
 
         return listgroup;
+    }
+
+    private static MD_Etax getdatasort(List<String> datarow) {
+        MD_Etax data = new MD_Etax();
+
+
+        return data;
     }
 
     private static List<String> getDataByDataType(MD_Etax dataetex) {
