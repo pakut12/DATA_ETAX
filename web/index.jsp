@@ -26,7 +26,7 @@
                         <div class="col-sm-12 col-md-6 mx-auto">
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text" id="inputGroup-sizing-sm">BUKRS</span>
-                                <input type="text" class="form-control text-center" id="BUKRS" name="BUKRS">
+                                <input type="text" class="form-control text-center" id="BUKRS" name="BUKRS" value="1111">
                             </div>
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text" id="inputGroup-sizing-sm">LBLDAT</span>
@@ -57,11 +57,21 @@
                             </div>
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text" id="inputGroup-sizing-sm">LDOCTYPE</span>
-                                <input type="text" class="form-control text-center" id="LDOCTYPE" name="LDOCTYPE">
+                                <select class="form-select text-center" id="LDOCTYPE" name="LDOCTYPE">
+                                    <option value="T03">T03</option>
+                                    <option value="80">80</option>
+                                    <option value="81">81</option>
+                                </select>
+                                
                             </div>
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text" id="inputGroup-sizing-sm">HDOCTYPE</span>
-                                <input type="text" class="form-control text-center" id="HDOCTYPE" name="HDOCTYPE">
+                                 <select class="form-select text-center" id="HDOCTYPE" name="HDOCTYPE">
+                                    <option value="T03">T03</option>
+                                    <option value="80">80</option>
+                                    <option value="81">81</option>
+                                </select>
+                                
                             </div>
                             <button class="btn btn-sm btn-success w-100" type="button" onclick="getdataetax()">ค้นหา</button>
                         </div>
@@ -85,30 +95,22 @@
         </div>
         
         <script>
-            function download(url, filename) {
-                fetch(url)
-                .then(response => response.blob())
-                .then(blob => {
-                    const link = document.createElement("a");
-                    link.href = URL.createObjectURL(blob);
-                    link.download = filename;
-                    link.click();
-                })
-                .catch(console.error);
+            function today(){
+                const currentDate = new Date();
+                const year = currentDate.getFullYear();
+                const month = currentDate.getMonth() + 1; // Month is 0-based, so we add 1 to get the correct month
+                const day = currentDate.getDate();
+                const hours = currentDate.getHours();
+                const minutes = currentDate.getMinutes();
+                const seconds = currentDate.getSeconds();
+
+                const date = day + "_" + month+ "_"+ year;
+                return date
             }
             
+   
             function savefile(){
-                var BUKRS = "1111";
-                var LBLDAT = "2022-12-01";
-                var HBLDAT = "2023-01-03";
-                var LKUNRG = "1110000001";
-                var HKUNRG = "1110000001";
-                var LBRNCH = "00000";
-                var HBRNCH = "00016";
-                var LDOCTYPE = "T03";
-                var HDOCTYPE = "T03";
-        
-                /*
+                
                 var BUKRS = $("#BUKRS").val();
                 var LBLDAT = $("#LBLDAT").val();
                 var HBLDAT = $("#HBLDAT").val();
@@ -118,7 +120,7 @@
                 var HBRNCH = $("#HBRNCH").val();
                 var LDOCTYPE = $("#LDOCTYPE").val();
                 var HDOCTYPE = $("#HDOCTYPE").val();
-                 */
+                 
                 $.ajax({
                     type:"post",
                     url:"Etax",
@@ -136,24 +138,41 @@
                     },
                     success:function(url){
                         var js = JSON.parse(url)
-                        console.log(js)
-                       // download(js.url,js.filename)
+                       
+                        var data = "";
+                        
+                        $(js.data).each(function(k,v){
+                            var list = v
+                            
+                            $(list).each(function(k1,v1){
+                                if(k1 < list.length-1){
+                                    data += '"'+ v1 + '",';
+                                }else if(k1 == list.length-1){
+                                    data += '"'+ v1 + '"';
+                                }
+                            })
+                            data += "\n";
+                       
+                        })
+                        console.log(data)
+                        
+                        const BOM = '\uFEFF';
+                        const fileName = 'DATA_ETAX_'+today()+'.csv'; // Set the desired file name here
+                        const blob = new Blob([BOM + data], { type: 'text/csv;charset=utf-8' });
+
+                        const link = window.URL.createObjectURL(blob);
+                        const linkElem = document.createElement('a');
+                        linkElem.href = link;
+                        linkElem.download = fileName; // Set the 'download' attribute to specify the file name
+                        linkElem.click();
+                         
+                        window.open("https://etax.one.th/portal/login")
                     }
                 })
             }
-            
+           
             function getdataetax(){
-                var BUKRS = "1111";
-                var LBLDAT = "2022-12-01";
-                var HBLDAT = "2023-01-03";
-                var LKUNRG = "1110000001";
-                var HKUNRG = "1110000001";
-                var LBRNCH = "00000";
-                var HBRNCH = "00016";
-                var LDOCTYPE = "T03";
-                var HDOCTYPE = "T03";
-        
-                /*
+               
                 var BUKRS = $("#BUKRS").val();
                 var LBLDAT = $("#LBLDAT").val();
                 var HBLDAT = $("#HBLDAT").val();
@@ -163,7 +182,8 @@
                 var HBRNCH = $("#HBRNCH").val();
                 var LDOCTYPE = $("#LDOCTYPE").val();
                 var HDOCTYPE = $("#HDOCTYPE").val();
-                 */
+                 
+        
                 $.ajax({
                     type:"post",
                     url:"Etax",
@@ -204,16 +224,6 @@
                                         savefile()
                                     }
                                 },
-                                {
-                                    extend: 'csv',
-                                    text: 'Export csv',
-                                    charset: 'utf-8',
-                                    extension: '.csv',
-                                    fieldSeparator: ';',
-                                    fieldBoundary: '',
-                                    filename: 'export',
-                                    bom: true
-                                },
                                 'excel'
                             ],
                             data: json.data,
@@ -228,7 +238,7 @@
             
             
             $(document).ready(function(){
-            
+                  
             })
         </script>
     </body>

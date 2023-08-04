@@ -78,7 +78,7 @@ public class Etax extends HttpServlet {
                     obj.put("data", arr);
                    
                     //String filename = url.replace("file/", "");
-/*
+                    /*
                     JSONObject obj = new JSONObject();
                     obj.put("url", url);
                     obj.put("filename", filename);

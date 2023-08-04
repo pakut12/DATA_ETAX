@@ -526,11 +526,9 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
         <copy-ear-war file="${file.reference.poi-4.1.0.jar}" propname="included.lib.file.reference.poi-4.1.0.jar.X"/>
         <basename file="${file.reference.sapjco.jar}" property="included.lib.file.reference.sapjco.jar"/>
         <copy-ear-war file="${file.reference.sapjco.jar}" propname="included.lib.file.reference.sapjco.jar.X"/>
-        <basename file="${file.reference.opencsv-3.9.jar}" property="included.lib.file.reference.opencsv-3.9.jar"/>
-        <copy-ear-war file="${file.reference.opencsv-3.9.jar}" propname="included.lib.file.reference.opencsv-3.9.jar.X"/>
         <mkdir dir="${build.web.dir}/META-INF"/>
         <manifest file="${build.web.dir}/META-INF/MANIFEST.MF" mode="update">
-            <attribute name="Class-Path" value="${included.lib.file.reference.gson-2.8.2.jar} ${included.lib.file.reference.jdbc-oracle.jar} ${included.lib.file.reference.mysql-connector-java-5.0.2.jar} ${included.lib.file.reference.org.json.jar} ${included.lib.file.reference.poi-3.10.1-20140818.jar} ${included.lib.file.reference.poi-3.9-20121203.jar} ${included.lib.file.reference.poi-4.1.0.jar} ${included.lib.file.reference.sapjco.jar} ${included.lib.file.reference.opencsv-3.9.jar} "/>
+            <attribute name="Class-Path" value="${included.lib.file.reference.gson-2.8.2.jar} ${included.lib.file.reference.jdbc-oracle.jar} ${included.lib.file.reference.mysql-connector-java-5.0.2.jar} ${included.lib.file.reference.org.json.jar} ${included.lib.file.reference.poi-3.10.1-20140818.jar} ${included.lib.file.reference.poi-3.9-20121203.jar} ${included.lib.file.reference.poi-4.1.0.jar} ${included.lib.file.reference.sapjco.jar} "/>
         </manifest>
         <delete dir="${dist.ear.dir}/temp"/>
     </target>
@@ -543,7 +541,6 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
         <copy file="${file.reference.poi-3.9-20121203.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copy file="${file.reference.poi-4.1.0.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copy file="${file.reference.sapjco.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copy file="${file.reference.opencsv-3.9.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
     </target>
     <target depends="init,compile,compile-jsps,-pre-dist,library-inclusion-in-manifest" name="do-ear-dist">
         <dirname file="${dist.ear.war}" property="dist.jar.dir"/>

@@ -6,15 +6,12 @@ package service;
 
 import com.sap.mw.jco.IFunctionTemplate;
 import com.sap.mw.jco.JCO;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import model.MD_Etax;
 import utility.ConnectSap;
-import utility.Utility;
 
 /**
  *
@@ -32,7 +29,7 @@ public class EtaxService {
 
             String version = JCO.getVersion();
 
-            System.out.println("SAP : " + version);
+            //  System.out.println("SAP : " + version);
 
             JCO.Repository repository = new JCO.Repository("Myrep", client);
             IFunctionTemplate ftemplate1 = repository.getFunctionTemplate("ZRFC_LIST_ETAX_DATA");
@@ -163,19 +160,6 @@ public class EtaxService {
         return listall;
     }
 
-    private static int getsumdocbydocid(List<MD_Etax> etax, String doc_id) {
-        int sumdoc = 0;
-
-        for (MD_Etax listdata : etax) {
-            if (doc_id.equals(listdata.getDOCID()) && listdata.getDATATYPE().equals("L")) {
-                sumdoc++;
-            }
-        }
-
-        return sumdoc;
-
-    }
-
     private static List<String> getSumDoc(List<MD_Etax> etax) {
 
         int sum = 0;
@@ -192,43 +176,48 @@ public class EtaxService {
         return docid;
     }
 
-    private static void writeLine(FileWriter writer, List<String> values) throws IOException {
-        try {
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < values.size(); i++) {
-                String txt = "\"" + values.get(i) + "\"";
-
-                sb.append(txt);
-                if (i < values.size() - 1) {
-                    sb.append(",");
-                }
-            }
-            sb.append("\n");
-            writer.append(sb.toString());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     public static List<List<String>> SaveCsvEtax(List<MD_Etax> etax) throws IOException, SQLException {
 
-        String url = "";
         List<List<String>> list = new ArrayList<List<String>>();
 
         try {
-
-            String path = pathlocal + "DATA_ETAX_" + Utility.getdatetoday() + ".txt";
-            FileWriter writer = new FileWriter(path);
 
             List<MD_Etax> Groupdata = Groupdata(etax);
             List<String> docid = getSumDoc(etax);
 
             for (String id : docid) {
+                List<String> docChark = new ArrayList<String>();
+
                 for (MD_Etax listdata : Groupdata) {
                     if (listdata.getDOCID().equals(id)) {
-                        List<String> datarow = getDataByDataType(listdata);
-                        list.add(datarow);
-                    // writeLine(writer, datarow);
+                        if (listdata.getDATATYPE().equals("L")) {
+                            List<MD_Etax> listdataL = getdatasort(etax, id);
+                            //System.out.println("L : " + listdataL.size());
+                            if (!docChark.contains(id)) {
+                                for (int n = 0; n <= listdataL.size(); n++) {
+
+                                    //System.out.println("N : " + n);
+
+                                    for (MD_Etax d : listdataL) {
+                                        //System.out.println("N : " + n);
+                                        System.out.println("T : " + d.getLINEID());
+                                        if (n == Integer.parseInt(d.getLINEID())) {
+                                            System.out.println("X : " + n);
+                                            List<String> datarow = getDataByDataType(d);
+                                            list.add(datarow);
+                                            break;
+                                        }
+                                    }
+                                }
+                                docChark.add(id);
+                            }
+
+                        } else {
+                            List<String> datarow = getDataByDataType(listdata);
+                            list.add(datarow);
+                        }
+
+
                     }
                 }
             }
@@ -238,24 +227,15 @@ public class EtaxService {
             datatypeT.add("T");
             datatypeT.add(String.valueOf(docid.size()));
             list.add(datatypeT);
-            // writeLine(writer, datatypeT);
-
-
-            // writer.flush();
-            //writer.close();
-
-            url = "file/DATA_ETAX_" + Utility.getdatetoday() + ".csv";
-
 
         } catch (Exception e) {
             e.printStackTrace();
-            url = "";
         }
 
         return list;
     }
 
-    private static List<MD_Etax> Groupdata(List<MD_Etax> etax) {
+    public static List<MD_Etax> Groupdata(List<MD_Etax> etax) {
         List<MD_Etax> listgroup = new ArrayList<MD_Etax>();
 
         List<String> listtype = new ArrayList<String>();
@@ -280,14 +260,19 @@ public class EtaxService {
         return listgroup;
     }
 
-    private static MD_Etax getdatasort(List<String> datarow) {
-        MD_Etax data = new MD_Etax();
+    private static List<MD_Etax> getdatasort(List<MD_Etax> datarow, String docid) {
+        List<MD_Etax> listdataL = new ArrayList<MD_Etax>();
 
+        for (MD_Etax d : datarow) {
+            if (d.getDOCID().equals(docid) && d.getDATATYPE().equals("L")) {
+                listdataL.add(d);
+            }
+        }
 
-        return data;
+        return listdataL;
     }
 
-    private static List<String> getDataByDataType(MD_Etax dataetex) {
+    public static List<String> getDataByDataType(MD_Etax dataetex) {
         List<String> datarow = new ArrayList<String>();
         try {
 
