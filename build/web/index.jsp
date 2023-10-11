@@ -13,6 +13,35 @@
         <%@ include file="share/header.jsp" %>
     </head>
     <body>
+        
+        <div class="modal fade" id="modal_userpassetax" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">ดูรหัสผ่าน User/Pass One-Etax</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="text-center">
+                           >>>> <a href="https://etax.one.th/portal/login" target="_blank">Web One-Etax</a> <<<<<br>
+                               <br>
+                            เข้าระบบ Web Portal<br>
+                            Username : account123<br>
+                            Password : Account@123<br>
+                            Tax ID      : 0107537001552<br>
+                            <br>
+                            เข้า sFTP CLIENT<br>
+                            Username : account<br>
+                            Password : Acc@pg666<br>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
         <div class="container">
             <div class="text-center h1 fw-bold mt-3">
                 GET DATA ETAX
@@ -61,19 +90,25 @@
                                     <option value="T03">T03</option>
                                     <option value="80">80</option>
                                     <option value="81">81</option>
+                                    <option value="388">388</option>
                                 </select>
                                 
                             </div>
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text" id="inputGroup-sizing-sm">HDOCTYPE</span>
-                                 <select class="form-select text-center" id="HDOCTYPE" name="HDOCTYPE">
+                                <select class="form-select text-center" id="HDOCTYPE" name="HDOCTYPE">
                                     <option value="T03">T03</option>
                                     <option value="80">80</option>
                                     <option value="81">81</option>
+                                    <option value="388">388</option>
                                 </select>
                                 
                             </div>
-                            <button class="btn btn-sm btn-success w-100" type="button" onclick="getdataetax()">ค้นหา</button>
+                            <div class="d-flex justify-content-evenly">
+                                <button class="btn btn-sm btn-success w-50 " type="button" onclick="getdataetax()">ค้นหา</button>
+                                &nbsp;&nbsp;
+                                <button class="btn btn-sm btn-primary w-50" type="button" onclick="getuserpassetax()">ดูรหัสผ่าน User/Pass One-Etax </button>
+                            </div>
                         </div>
                         
                     </div>
@@ -95,6 +130,11 @@
         </div>
         
         <script>
+            
+            function getuserpassetax(){
+                $('#modal_userpassetax').modal('show')
+            }
+            
             function today(){
                 const currentDate = new Date();
                 const year = currentDate.getFullYear();
@@ -165,7 +205,6 @@
                         linkElem.href = link;
                         linkElem.download = fileName; // Set the 'download' attribute to specify the file name
                         linkElem.click();
-                         
                         window.open("https://etax.one.th/portal/login")
                     }
                 })

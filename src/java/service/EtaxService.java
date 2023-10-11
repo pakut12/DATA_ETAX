@@ -275,7 +275,8 @@ public class EtaxService {
     public static List<String> getDataByDataType(MD_Etax dataetex) {
         List<String> datarow = new ArrayList<String>();
         try {
-
+                System.out.println(dataetex.getDATATYPE());
+                System.out.println(dataetex.getDOCTYPE());
             if (dataetex.getDATATYPE().equals("C")) {
 
                 if (dataetex.getDOCTYPE().equals("T03")) {
@@ -288,7 +289,7 @@ public class EtaxService {
                     datarow.add(dataetex.getSTAXID());
                     datarow.add(dataetex.getSBRANCH());
                     datarow.add("");
-                } else {
+                } else if (dataetex.getDOCTYPE().equals("388")) {
                     datarow.add(dataetex.getDATATYPE());
                     datarow.add(dataetex.getSTAXID());
                     datarow.add(dataetex.getSBRANCH());
@@ -352,7 +353,7 @@ public class EtaxService {
                     datarow.add("");
                     datarow.add("");
                     datarow.add(dataetex.getSENDEMAIL());
-                } else {
+                } else if (dataetex.getDOCTYPE().equals("388")) {
                     datarow.add(dataetex.getDATATYPE());
                     datarow.add(dataetex.getDOCTYPE());
                     datarow.add(dataetex.getDOCNAME());
@@ -383,6 +384,7 @@ public class EtaxService {
                 }
 
             } else if (dataetex.getDATATYPE().equals("B")) {
+                
                 if (dataetex.getDOCTYPE().equals("T03") || dataetex.getDOCTYPE().equals("80") || dataetex.getDOCTYPE().equals("81")) {
                     datarow.add(dataetex.getDATATYPE());
                     datarow.add(dataetex.getKUNRG());
@@ -410,7 +412,7 @@ public class EtaxService {
                     datarow.add("");
                     datarow.add("");
                     datarow.add(dataetex.getBCOUNTRY());
-                } else {
+                } else if (dataetex.getDOCTYPE().equals("388")) {
                     datarow.add(dataetex.getDATATYPE());
                     datarow.add(dataetex.getKUNRG());
                     datarow.add(dataetex.getKNAME());
@@ -584,7 +586,7 @@ public class EtaxService {
                     datarow.add(dataetex.getPREMARK8());
                     datarow.add(dataetex.getPREMARK9());
 
-                } else {
+                } else if(dataetex.getDOCTYPE().equals("388")) {
                     datarow.add(dataetex.getDATATYPE());
                     datarow.add(dataetex.getLINEID());
                     datarow.add(dataetex.getPRODUCTID());
@@ -611,7 +613,7 @@ public class EtaxService {
                     datarow.add(dataetex.getLBASICCUR());
                     datarow.add(dataetex.getLTAXAMT());
                     datarow.add(dataetex.getLTAXCUR());
-                    datarow.add("");
+                    datarow.add(dataetex.getLALLOWIND());
                     datarow.add(dataetex.getLALLOWAMT());
                     datarow.add(dataetex.getLALLOWCUR());
                     datarow.add("");
@@ -625,13 +627,12 @@ public class EtaxService {
                     datarow.add("");
                     datarow.add(dataetex.getPREMARK2());
                     datarow.add("");
-                    datarow.add("");
-                    datarow.add("");
-                    datarow.add("");
-                    datarow.add("");
-                    datarow.add("");
-                    datarow.add("");
-                    datarow.add("");
+                    datarow.add(dataetex.getPREMARK4());
+                    datarow.add(dataetex.getPREMARK5());
+                    datarow.add(dataetex.getPREMARK6());
+                    datarow.add(dataetex.getPREMARK7());
+                    datarow.add(dataetex.getPREMARK8());
+                    datarow.add(dataetex.getPREMARK9());
                 }
 
             } else if (dataetex.getDATATYPE().equals("F")) {
@@ -878,7 +879,7 @@ public class EtaxService {
                     datarow.add("");
                     datarow.add("");
                     datarow.add("");
-                } else {
+                } else if(dataetex.getDOCTYPE().equals("388")) {
                     datarow.add(dataetex.getDATATYPE());
                     datarow.add(dataetex.getLINEIDTOT());
                     datarow.add("");
