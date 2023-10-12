@@ -23,8 +23,8 @@
                     </div>
                     <div class="modal-body">
                         <div class="text-center">
-                           >>>> <a href="https://etax.one.th/portal/login" target="_blank">Web One-Etax</a> <<<<<br>
-                               <br>
+                            >>>> <a href="https://etax.one.th/portal/login" target="_blank">Web One-Etax</a> <<<<<br>
+                            <br>
                             เข้าระบบ Web Portal<br>
                             Username : account123<br>
                             Password : Account@123<br>
@@ -92,7 +92,6 @@
                                     <option value="81">81</option>
                                     <option value="388">388</option>
                                 </select>
-                                
                             </div>
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text" id="inputGroup-sizing-sm">HDOCTYPE</span>
@@ -121,16 +120,61 @@
                 </div>
                 <div class="card-body">
                     
-                    <table class="table text-nowrap table-bordered table-sm" id="table_etax">
+                    
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">รายละเอียดบิลทั้งหมด</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">รายละเอียดบิลสรุป</button>
+                        </li>
                         
-                    </table>
+                    </ul>
+                    <div class="tab-content" id="myTabContent">
+                        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                            <br>
+                            <table class="table text-nowrap table-bordered table-sm w-100" id="table_etax"></table>
+                        </div>
+                        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                            <br>
+                            <div class="text-end fw-bold h2" id="all_bill"></div>
+                            <br>
+                            <table class="table text-nowrap table-bordered table-sm w-100" id="table_etax_sum"></table>
+                        </div>
+                        
+                    </div>
+                    
                 </div>
             </div>
+            
+            
             <%@ include file="share/footer.jsp" %>
         </div>
         
         <script>
             
+            function getdataetax(){
+                Swal.fire({
+                    title: 'Loading...',
+                    allowOutsideClick: false, // Prevent users from closing the dialog
+                    didOpen: () => {
+                        Swal.showLoading();
+                    },
+                    showConfirmButton: false
+                });
+                
+                $('#table_etax').empty()
+                $('#table_etax_sum').empty()
+              
+        
+                gettbdataetaxall()
+                gettbdataetaxsum()
+                $(document).on('shown.bs.modal shown.bs.tab', function () {
+                    $("#table_etax").DataTable().columns.adjust().draw();
+                    $("#table_etax_sum").DataTable().columns.adjust().draw();
+                });
+            }
+    
             function getuserpassetax(){
                 $('#modal_userpassetax').modal('show')
             }
@@ -210,7 +254,62 @@
                 })
             }
            
-            function getdataetax(){
+
+            function gettbdataetaxsum(){
+               
+                var BUKRS = $("#BUKRS").val();
+                var LBLDAT = $("#LBLDAT").val();
+                var HBLDAT = $("#HBLDAT").val();
+                var LKUNRG = $("#LKUNRG").val();
+                var HKUNRG = $("#HKUNRG").val();
+                var LBRNCH = $("#LBRNCH").val();
+                var HBRNCH = $("#HBRNCH").val();
+                var LDOCTYPE = $("#LDOCTYPE").val();
+                var HDOCTYPE = $("#HDOCTYPE").val();
+                 
+        
+                $.ajax({
+                    type:"post",
+                    url:"Etax",
+                    data:{
+                        type:"getdatasumetax",
+                        BUKRS:BUKRS,
+                        LBLDAT:LBLDAT,
+                        HBLDAT: HBLDAT,
+                        LKUNRG:LKUNRG,  
+                        HKUNRG:HKUNRG,  
+                        LBRNCH:LBRNCH,
+                        HBRNCH:HBRNCH,
+                        LDOCTYPE:LDOCTYPE,
+                        HDOCTYPE:HDOCTYPE
+                    },
+                    success:function(msg){
+                        var json = JSON.parse(msg)
+                        console.log(json)
+                        $("#all_bill").text("จำนวนบิลทั้งหมด " + json.data.length + " บิล")
+                        $('#table_etax_sum').DataTable( {
+                            dom: 'Bfrtip',
+                            buttons: [
+                                'pageLength',
+                                {
+                                    extend: 'excel',
+                                    filename: 'DATA_ETAX_ALLBILL_'+today(),
+                                    
+                                    title: 'DATA_ETAX_ALLBILL_'+today()
+                                },
+                            ],
+                            data: json.data,
+                            columns:json.datacols,
+                            scrollX: true,
+                            destroy: true,
+                            order: [[3,'asc']]
+                        } );
+                       
+                    }
+                })
+            }
+
+            function gettbdataetaxall(){
                
                 var BUKRS = $("#BUKRS").val();
                 var LBLDAT = $("#LBLDAT").val();
@@ -239,6 +338,7 @@
                         HDOCTYPE:HDOCTYPE
                     },
                     success:function(msg){
+                        Swal.close()
                         var json = JSON.parse(msg)
                         if(json.data.length > 0){
                             Swal.fire({
@@ -253,6 +353,8 @@
                                 icon:"error"
                             })
                         }
+                        
+        
                         $('#table_etax').DataTable( {
                             dom: 'Bfrtip',
                             buttons: [
@@ -271,6 +373,8 @@
                             destroy: true,
                             order: [[3,'asc']]
                         } );
+                        
+
                     }
                 })
             }

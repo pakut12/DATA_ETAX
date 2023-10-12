@@ -9,6 +9,7 @@ import com.sap.mw.jco.JCO;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import model.MD_Etax;
 import utility.ConnectSap;
@@ -21,6 +22,44 @@ public class EtaxService {
 
     private static String pathlocal = "C:/Users/pakutsing/Desktop/Github/DATA_ETAX/build/web/file/";
     private static String pathserver = "/web/webapps/DATA_ETAX/file/";
+
+    public static List<MD_Etax> GetAllSumListEtax(List<MD_Etax> alldata) {
+        List<MD_Etax> listall = new ArrayList<MD_Etax>();
+        try {
+            List<String> docid = EtaxService.getSumDoc(alldata);
+            String[] doctype = {"C", "H", "B", "L", "F"};
+            HashSet<String> doc = new HashSet<String>();
+
+            for (String id : docid) {
+                MD_Etax etax = new MD_Etax();
+                for (MD_Etax d : alldata) {
+                    
+                    if (id.equals(d.getDOCID()) && d.getDATATYPE().equals("C")) {
+                        etax.setBLDAT(d.getBLDAT());
+                        etax.setDOCID(id);
+                        etax.setSBRANCH(d.getSBRANCH());
+                        etax.setDOCTYPE(d.getDOCTYPE());
+                        etax.setDOCNAME(d.getDOCNAME());
+                        etax.setKUNRG(d.getKUNRG());
+                        etax.setSTAXID(d.getSTAXID());
+                    } else if (id.equals(d.getDOCID()) && d.getDATATYPE().equals("F")) {
+                        etax.setBASICAMT(d.getBASICAMT());
+                        etax.setTAXAMT(d.getTAXAMT());
+                        etax.setGRANDAMT(d.getGRANDAMT());
+                    }
+                    
+                }
+
+                listall.add(etax);
+
+
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return listall;
+    }
 
     public static List<MD_Etax> GetAllListEtax(String BUKRS, String LBLDAT, String HBLDAT, String LKUNRG, String HKUNRG, String LBRNCH, String HBRNCH, String LDOCTYPE, String HDOCTYPE) {
         List<MD_Etax> listall = new ArrayList<MD_Etax>();
@@ -275,8 +314,8 @@ public class EtaxService {
     public static List<String> getDataByDataType(MD_Etax dataetex) {
         List<String> datarow = new ArrayList<String>();
         try {
-                System.out.println(dataetex.getDATATYPE());
-                System.out.println(dataetex.getDOCTYPE());
+            System.out.println(dataetex.getDATATYPE());
+            System.out.println(dataetex.getDOCTYPE());
             if (dataetex.getDATATYPE().equals("C")) {
 
                 if (dataetex.getDOCTYPE().equals("T03")) {
@@ -384,7 +423,7 @@ public class EtaxService {
                 }
 
             } else if (dataetex.getDATATYPE().equals("B")) {
-                
+
                 if (dataetex.getDOCTYPE().equals("T03") || dataetex.getDOCTYPE().equals("80") || dataetex.getDOCTYPE().equals("81")) {
                     datarow.add(dataetex.getDATATYPE());
                     datarow.add(dataetex.getKUNRG());
@@ -586,7 +625,7 @@ public class EtaxService {
                     datarow.add(dataetex.getPREMARK8());
                     datarow.add(dataetex.getPREMARK9());
 
-                } else if(dataetex.getDOCTYPE().equals("388")) {
+                } else if (dataetex.getDOCTYPE().equals("388")) {
                     datarow.add(dataetex.getDATATYPE());
                     datarow.add(dataetex.getLINEID());
                     datarow.add(dataetex.getPRODUCTID());
@@ -879,7 +918,7 @@ public class EtaxService {
                     datarow.add("");
                     datarow.add("");
                     datarow.add("");
-                } else if(dataetex.getDOCTYPE().equals("388")) {
+                } else if (dataetex.getDOCTYPE().equals("388")) {
                     datarow.add(dataetex.getDATATYPE());
                     datarow.add(dataetex.getLINEIDTOT());
                     datarow.add("");
