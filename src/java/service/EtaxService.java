@@ -33,7 +33,7 @@ public class EtaxService {
             for (String id : docid) {
                 MD_Etax etax = new MD_Etax();
                 for (MD_Etax d : alldata) {
-                    
+
                     if (id.equals(d.getDOCID()) && d.getDATATYPE().equals("C")) {
                         etax.setBLDAT(d.getBLDAT());
                         etax.setDOCID(id);
@@ -47,7 +47,7 @@ public class EtaxService {
                         etax.setTAXAMT(d.getTAXAMT());
                         etax.setGRANDAMT(d.getGRANDAMT());
                     }
-                    
+
                 }
 
                 listall.add(etax);
@@ -61,14 +61,12 @@ public class EtaxService {
         return listall;
     }
 
-    public static List<MD_Etax> GetAllListEtax(String BUKRS, String LBLDAT, String HBLDAT, String LKUNRG, String HKUNRG, String LBRNCH, String HBRNCH, String LDOCTYPE, String HDOCTYPE) {
+    public static List<MD_Etax> GetAllListEtax(String BUKRS, String LBLDAT, String HBLDAT, String LBRNCH, String HBRNCH) {
         List<MD_Etax> listall = new ArrayList<MD_Etax>();
         try {
             JCO.Client client = ConnectSap.createpool();
 
             String version = JCO.getVersion();
-
-            //  System.out.println("SAP : " + version);
 
             JCO.Repository repository = new JCO.Repository("Myrep", client);
             IFunctionTemplate ftemplate1 = repository.getFunctionTemplate("ZRFC_LIST_ETAX_DATA");
@@ -78,12 +76,8 @@ public class EtaxService {
             input1.setValue(BUKRS, "BUKRS");
             input1.setValue(LBLDAT, "LBLDAT");
             input1.setValue(HBLDAT, "HBLDAT");
-            input1.setValue(LKUNRG, "LKUNRG");
-            input1.setValue(HKUNRG, "HKUNRG");
             input1.setValue(LBRNCH, "LBRNCH");
             input1.setValue(HBRNCH, "HBRNCH");
-            input1.setValue(LDOCTYPE, "LDOCTYPE");
-            input1.setValue(HDOCTYPE, "HDOCTYPE");
             client.execute(function1);
 
             //System.out.println(function1);
@@ -93,9 +87,108 @@ public class EtaxService {
             int numColumns = output.getFieldCount();
             int numrow = output.getNumRows();
 
+            System.out.println("SAP : " + version);
+            System.out.println("ROWS : " + numrow);
+            System.out.println("COLS : " + numColumns);
+
             int a = 0;
 
             while (a < numrow) {
+
+                /*
+                System.out.println("-----------------------------------------------------------------------------------------");
+                System.out.println(output.getString("BLDAT"));
+                System.out.println(output.getString("BUKRS"));
+                System.out.println(output.getString("BRNCH"));
+                System.out.println(output.getString("DOCID"));
+                System.out.println(output.getString("DOCTYPE"));
+                System.out.println(output.getString("DOCNAME"));
+                System.out.println(output.getString("KUNRG"));
+                System.out.println(output.getString("KNAME"));
+                System.out.println(output.getString("TAXTYPE"));
+                System.out.println(output.getString("DATATYPE"));
+                System.out.println(output.getString("STAXID"));
+                System.out.println(output.getString("SBRANCH"));
+                System.out.println(output.getString("PRODUCTID"));
+                System.out.println(output.getString("DOCDATE"));
+                System.out.println(output.getString("PURPOSECODE"));
+                System.out.println(output.getString("PURPOSE"));
+                System.out.println(output.getString("ADDREFID"));
+                System.out.println(output.getString("ADDREFDATE"));
+                System.out.println(output.getString("ADDREFTYPE"));
+                System.out.println(output.getString("ADDREFNAME"));
+                System.out.println(output.getString("ORDERID"));
+                System.out.println(output.getString("ORDERDATE"));
+                System.out.println(output.getString("SENDEMAIL"));
+                System.out.println(output.getString("SENDDATE"));
+                System.out.println(output.getString("BUYERTAXID"));
+                System.out.println(output.getString("BBRANCHID"));
+                System.out.println(output.getString("BPOSTCODE"));
+                System.out.println(output.getString("BADDRESS1"));
+                System.out.println(output.getString("BADDRESS2"));
+                System.out.println(output.getString("BCOUNTRY"));
+                System.out.println(output.getString("LINEID"));
+                System.out.println(output.getString("PRODUCTNAME"));
+                System.out.println(output.getString("PRODUCTDESC"));
+                System.out.println(output.getString("PRODUCTAMT"));
+                System.out.println(output.getString("PRODUCTCUR"));
+                System.out.println(output.getString("PRODUCTQTY"));
+                System.out.println(output.getString("PRODUCTUNIT"));
+                System.out.println(output.getString("LTAXCODE"));
+                System.out.println(output.getString("LTAXRATE"));
+                System.out.println(output.getString("LBASICAMT"));
+                System.out.println(output.getString("LBASICCUR"));
+                System.out.println(output.getString("LTAXAMT"));
+                System.out.println(output.getString("LTAXCUR"));
+                System.out.println(output.getString("LALLOWIND"));
+                System.out.println(output.getString("LALLOWAMT"));
+                System.out.println(output.getString("LALLOWCUR"));
+                System.out.println(output.getString("LTOTAMT"));
+                System.out.println(output.getString("LTOTCUR"));
+                System.out.println(output.getString("LNETAMT"));
+                System.out.println(output.getString("LNETCUR"));
+                System.out.println(output.getString("LINCAMT"));
+                System.out.println(output.getString("LINCCUR"));
+                System.out.println(output.getString("PREMARK1"));
+                System.out.println(output.getString("PREMARK2"));
+                System.out.println(output.getString("PREMARK3"));
+                System.out.println(output.getString("PREMARK4"));
+                System.out.println(output.getString("PREMARK5"));
+                System.out.println(output.getString("PREMARK6"));
+                System.out.println(output.getString("PREMARK7"));
+                System.out.println(output.getString("PREMARK8"));
+                System.out.println(output.getString("PREMARK9"));
+                System.out.println(output.getString("LINEIDTOT"));
+                System.out.println(output.getString("TAXCODE"));
+                System.out.println(output.getString("TAXRATE"));
+                System.out.println(output.getString("BASICAMT"));
+                System.out.println(output.getString("BASICCUR"));
+                System.out.println(output.getString("TAXAMT"));
+                System.out.println(output.getString("TAXCUR"));
+                System.out.println(output.getString("ALLOWIND"));
+                System.out.println(output.getString("ALLOWAMT"));
+                System.out.println(output.getString("ALLOWCUR"));
+                System.out.println(output.getString("ORITOTAMT"));
+                System.out.println(output.getString("ORITOTCUR"));
+                System.out.println(output.getString("LINETOTAMT"));
+                System.out.println(output.getString("LINETOTCUR"));
+                System.out.println(output.getString("ADJUSTAMT"));
+                System.out.println(output.getString("ADJUSTCUR"));
+                System.out.println(output.getString("ALLOWTOTAMT"));
+                System.out.println(output.getString("ALLOWTOTCUR"));
+                System.out.println(output.getString("BASICTOTAMT"));
+                System.out.println(output.getString("BASICTOTCUR"));
+                System.out.println(output.getString("TAXTOTAMT"));
+                System.out.println(output.getString("TAXTOTCUR"));
+                System.out.println(output.getString("GRANDAMT"));
+                System.out.println(output.getString("GRANDCUR"));
+                System.out.println(output.getString("TERMPAYMENT"));
+                System.out.println(output.getString("DOCREMARK1"));
+                System.out.println(output.getString("DOCREMARK2"));
+                System.out.println("-----------------------------------------------------------------------------------------");
+                 */
+
+
                 output.setRow(a);
 
                 MD_Etax etax = new MD_Etax();
@@ -190,6 +283,7 @@ public class EtaxService {
 
                 listall.add(etax);
                 a++;
+
             }
 
         } catch (Exception e) {
@@ -205,12 +299,10 @@ public class EtaxService {
         List<String> docid = new ArrayList<String>();
 
         for (MD_Etax doc : etax) {
-            if (!docid.contains(doc.getDOCID())) {
-                docid.add(doc.getDOCID());
+            if (!docid.contains(doc.getDOCID()) && !doc.getDOCID().isEmpty()) {
+                docid.add(doc.getDOCID().trim());
             }
         }
-
-
 
         return docid;
     }
@@ -225,6 +317,10 @@ public class EtaxService {
             List<String> docid = getSumDoc(etax);
 
             for (String id : docid) {
+
+                System.out.println("-------------------------------------------------------------------");
+                System.out.println("ID : "+id);
+                
                 List<String> docChark = new ArrayList<String>();
 
                 for (MD_Etax listdata : Groupdata) {
@@ -259,6 +355,8 @@ public class EtaxService {
 
                     }
                 }
+
+                System.out.println("-------------------------------------------------------------------");
             }
 
 

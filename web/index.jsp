@@ -11,6 +11,13 @@
 <html>
     <head>
         <%@ include file="share/header.jsp" %>
+        <style>
+            #all_bill p {
+                display: inline; /* ทำให้ <p> เป็น inline element */
+                margin: 0; /* ลบการเว้นระหว่าง <p> */
+                padding: 0; /* ลบการเว้นระหว่าง <p> */
+            }
+        </style>
     </head>
     <body>
         
@@ -42,112 +49,79 @@
             </div>
         </div>
         
-        <div class="container">
+        <div class="mx-5">
             <div class="text-center h1 fw-bold mt-3">
                 GET DATA ETAX
             </div>
-            <div class="card mt-3 shadow" >
-                <div class="card-header">
-                    ค้นหา
-                </div>
-                <div class="card-body">
-                    <div class="row ">
-                        <div class="col-sm-12 col-md-6 mx-auto">
-                            <div class="input-group input-group-sm mb-3">
-                                <span class="input-group-text" id="inputGroup-sizing-sm">BUKRS</span>
-                                <input type="text" class="form-control text-center" id="BUKRS" name="BUKRS" value="1111">
-                            </div>
-                            <div class="input-group input-group-sm mb-3">
-                                <span class="input-group-text" id="inputGroup-sizing-sm">LBLDAT</span>
-                                <input type="date" class="form-control text-center" id="LBLDAT" name="LBLDAT">
-                            </div>
-                            <div class="input-group input-group-sm mb-3">
-                                <span class="input-group-text" id="inputGroup-sizing-sm">HBLDAT</span>
-                                <input type="date" class="form-control text-center" id="HBLDAT" name="HBLDAT">
-                            </div>
-                            <div class="input-group input-group-sm mb-3">
-                                <span class="input-group-text" id="inputGroup-sizing-sm">LKUNRG</span>
-                                <input type="text" class="form-control text-center" id="LKUNRG" name="LKUNRG">
-                            </div>
-                            <div class="input-group input-group-sm mb-3">
-                                <span class="input-group-text" id="inputGroup-sizing-sm">HKUNRG</span>
-                                <input type="text" class="form-control text-center" id="HKUNRG" name="HKUNRG" >
-                            </div>
-                            
+            <div class="row">
+                <div class="col-sm-12 col-md-3">
+                    <div class="card mt-3 shadow" >
+                        <div class="card-header">
+                            ค้นหา
                         </div>
-                        <div class="col-sm-12 col-md-6 mx-auto">
-                            <div class="input-group input-group-sm mb-3">
-                                <span class="input-group-text" id="inputGroup-sizing-sm">LBRNCH</span>
-                                <input type="text" class="form-control text-center" id="LBRNCH" name="LBRNCH">
-                            </div>
-                            <div class="input-group input-group-sm mb-3">
-                                <span class="input-group-text" id="inputGroup-sizing-sm">HBRNCH</span>
-                                <input type="text" class="form-control text-center" id="HBRNCH" name="HBRNCH">
-                            </div>
-                            <div class="input-group input-group-sm mb-3">
-                                <span class="input-group-text" id="inputGroup-sizing-sm">LDOCTYPE</span>
-                                <select class="form-select text-center" id="LDOCTYPE" name="LDOCTYPE">
-                                    <option value="T03">T03</option>
-                                    <option value="80">80</option>
-                                    <option value="81">81</option>
-                                    <option value="388">388</option>
-                                </select>
-                            </div>
-                            <div class="input-group input-group-sm mb-3">
-                                <span class="input-group-text" id="inputGroup-sizing-sm">HDOCTYPE</span>
-                                <select class="form-select text-center" id="HDOCTYPE" name="HDOCTYPE">
-                                    <option value="T03">T03</option>
-                                    <option value="80">80</option>
-                                    <option value="81">81</option>
-                                    <option value="388">388</option>
-                                </select>
+                        <div class="card-body">
+                            <div class="row ">
+                                <div class="col-sm-12 col-md-12 mx-auto">
+                                    <div class="input-group input-group-sm mb-3">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">BUKRS</span>
+                                        <input type="text" class="form-control text-center" id="BUKRS" name="BUKRS" value="1111">
+                                    </div>
+                                    <div class="input-group input-group-sm mb-3">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">LBLDAT</span>
+                                        <input type="date" class="form-control text-center" id="LBLDAT" name="LBLDAT">
+                                    </div>
+                                    <div class="input-group input-group-sm mb-3">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">HBLDAT</span>
+                                        <input type="date" class="form-control text-center" id="HBLDAT" name="HBLDAT">
+                                    </div>
+                                    <div class="input-group input-group-sm mb-3">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">LBRNCH</span>
+                                        <input type="text" class="form-control text-center" id="LBRNCH" name="LBRNCH" value="00000">
+                                    </div>
+                                    <div class="input-group input-group-sm mb-3">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">HBRNCH</span>
+                                        <input type="text" class="form-control text-center" id="HBRNCH" name="HBRNCH" value="00016">
+                                    </div>
+                                    <div class="input-group input-group-sm mb-3">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">LDOCTYPE</span>
+                                        <select class="form-select text-center" id="DOCTYPE" name="DOCTYPE">
+                                            <option value="T03">T03</option>
+                                            <option value="80">80</option>
+                                            <option value="81">81</option>
+                                            <option value="388">388</option>
+                                            <option value="ALL">ALL</option>
+                                        </select>
+                                    </div>
+                                    <div class="d-flex justify-content-evenly">
+                                        <button class="btn btn-sm btn-success w-50 " type="button" onclick="getdataetax()">ค้นหา</button>
+                                        &nbsp;&nbsp;
+                                        <button class="btn btn-sm btn-primary w-50" type="button" onclick="getuserpassetax()">ดูรหัสผ่าน  One-Etax </button>
+                                    </div>
+                                </div>
+                                
                                 
                             </div>
-                            <div class="d-flex justify-content-evenly">
-                                <button class="btn btn-sm btn-success w-50 " type="button" onclick="getdataetax()">ค้นหา</button>
-                                &nbsp;&nbsp;
-                                <button class="btn btn-sm btn-primary w-50" type="button" onclick="getuserpassetax()">ดูรหัสผ่าน User/Pass One-Etax </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-8">
+                    <div class="card mt-3 shadow" >
+                        <div class="card-header">
+                            เเสดงรายการ
+                        </div>
+                        <div class="card-body">
+                            
+                            <div class="d-flex justify-content-between mt-3">
+                                <div class="text-end fw-bold h4" id="txt2"></div>
+                                <div class="text-end fw-bold  h4" id="all_bill"></div>
                             </div>
-                        </div>
-                        
-                    </div>
-                </div>
-            </div>
-            
-            <div class="card mt-3 shadow" >
-                <div class="card-header">
-                    เเสดงรายการ
-                </div>
-                <div class="card-body">
-                    
-                    
-                    <ul class="nav nav-tabs" id="myTab" role="tablist">
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">รายละเอียดบิลทั้งหมด</button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">รายละเอียดบิลสรุป</button>
-                        </li>
-                        
-                    </ul>
-                    <div class="tab-content" id="myTabContent">
-                        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                            <br>
-                            <table class="table text-nowrap table-bordered table-sm w-100" id="table_etax"></table>
-                        </div>
-                        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                            <br>
-                            <div class="text-end fw-bold h2" id="all_bill"></div>
-                            <br>
+                            
                             <table class="table text-nowrap table-bordered table-sm w-100" id="table_etax_sum"></table>
+                            
                         </div>
-                        
                     </div>
-                    
                 </div>
             </div>
-            
-            
             <%@ include file="share/footer.jsp" %>
         </div>
         
@@ -163,16 +137,14 @@
                     showConfirmButton: false
                 });
                 
+                $("#txt1").text("รายละเอียดบิลทั้งหมด")
+                $("#txt2").text("รายละเอียดบิลสรุปทั้งหมด")
                 $('#table_etax').empty()
                 $('#table_etax_sum').empty()
               
-        
-                gettbdataetaxall()
+          
                 gettbdataetaxsum()
-                $(document).on('shown.bs.modal shown.bs.tab', function () {
-                    $("#table_etax").DataTable().columns.adjust().draw();
-                    $("#table_etax_sum").DataTable().columns.adjust().draw();
-                });
+                
             }
     
             function getuserpassetax(){
@@ -194,17 +166,22 @@
             
    
             function savefile(){
+                Swal.fire({
+                    title: 'Loading...',
+                    allowOutsideClick: false, // Prevent users from closing the dialog
+                    didOpen: () => {
+                        Swal.showLoading();
+                    },
+                    showConfirmButton: false
+                });
                 
                 var BUKRS = $("#BUKRS").val();
                 var LBLDAT = $("#LBLDAT").val();
                 var HBLDAT = $("#HBLDAT").val();
-                var LKUNRG = $("#LKUNRG").val();
-                var HKUNRG = $("#HKUNRG").val();
                 var LBRNCH = $("#LBRNCH").val();
                 var HBRNCH = $("#HBRNCH").val();
-                var LDOCTYPE = $("#LDOCTYPE").val();
-                var HDOCTYPE = $("#HDOCTYPE").val();
-                 
+                var DOCTYPE = $("#DOCTYPE").val(); 
+                
                 $.ajax({
                     type:"post",
                     url:"Etax",
@@ -213,16 +190,13 @@
                         BUKRS:BUKRS,
                         LBLDAT:LBLDAT,
                         HBLDAT: HBLDAT,
-                        LKUNRG:LKUNRG,  
-                        HKUNRG:HKUNRG,  
                         LBRNCH:LBRNCH,
-                        HBRNCH:HBRNCH,
-                        LDOCTYPE:LDOCTYPE,
-                        HDOCTYPE:HDOCTYPE
+                        HBRNCH:HBRNCH
                     },
                     success:function(url){
+                        Swal.close()
+                        
                         var js = JSON.parse(url)
-                       
                         var data = "";
                         
                         $(js.data).each(function(k,v){
@@ -249,7 +223,7 @@
                         linkElem.href = link;
                         linkElem.download = fileName; // Set the 'download' attribute to specify the file name
                         linkElem.click();
-                        window.open("https://etax.one.th/portal/login")
+                       // window.open("https://etax.one.th/portal/login")
                     }
                 })
             }
@@ -260,14 +234,12 @@
                 var BUKRS = $("#BUKRS").val();
                 var LBLDAT = $("#LBLDAT").val();
                 var HBLDAT = $("#HBLDAT").val();
-                var LKUNRG = $("#LKUNRG").val();
-                var HKUNRG = $("#HKUNRG").val();
                 var LBRNCH = $("#LBRNCH").val();
                 var HBRNCH = $("#HBRNCH").val();
-                var LDOCTYPE = $("#LDOCTYPE").val();
-                var HDOCTYPE = $("#HDOCTYPE").val();
+                var DOCTYPE = $("#DOCTYPE").val(); 
+                
+                console.log(DOCTYPE)
                  
-        
                 $.ajax({
                     type:"post",
                     url:"Etax",
@@ -276,35 +248,56 @@
                         BUKRS:BUKRS,
                         LBLDAT:LBLDAT,
                         HBLDAT: HBLDAT,
-                        LKUNRG:LKUNRG,  
-                        HKUNRG:HKUNRG,  
                         LBRNCH:LBRNCH,
                         HBRNCH:HBRNCH,
-                        LDOCTYPE:LDOCTYPE,
-                        HDOCTYPE:HDOCTYPE
+                        DOCTYPE:DOCTYPE
                     },
                     success:function(msg){
+                        Swal.close()
+                        console.log(msg)
                         var json = JSON.parse(msg)
-                        console.log(json)
-                        $("#all_bill").text("จำนวนบิลทั้งหมด " + json.data.length + " บิล")
-                        $('#table_etax_sum').DataTable( {
-                            dom: 'Bfrtip',
-                            buttons: [
-                                'pageLength',
-                                {
-                                    extend: 'excel',
-                                    filename: 'DATA_ETAX_ALLBILL_'+today(),
-                                    
-                                    title: 'DATA_ETAX_ALLBILL_'+today()
-                                },
-                            ],
-                            data: json.data,
-                            columns:json.datacols,
-                            scrollX: true,
-                            destroy: true,
-                            order: [[3,'asc']]
-                        } );
-                       
+                        if(msg && json.data.length > 0){
+                            
+                            Swal.fire({
+                                title:'ค้นหาสำเร็จ',
+                                text:'พบข้อมูล ' +json.data.length + ' บิล',
+                                icon:'success'
+                            })
+            
+                            
+                            console.log(json)
+                            $("#all_bill").html("<p>จำนวนบิลทั้งหมด </p><p class='text-success'>" + json.data.length + "</p> บิล");
+                            $('#table_etax_sum').DataTable( {
+                                dom: 'Bfrtip',
+                                buttons: [
+                                    'pageLength',
+                                    {
+                                        text: 'Csv',
+                                        action: function ( e, dt, node, config ) {
+                                            savefile()
+                                        }
+                                    },
+                                    {
+                                        extend: 'excel',
+                                        filename: 'DATA_ETAX_ALLBILL_'+today(),
+                                        title: 'DATA_ETAX_ALLBILL_'+today()
+                                    },
+                                ],
+                                data: json.data,
+                                columns:json.datacols,
+                                scrollX: true,
+                                destroy: true,
+                                order: [[3,'asc']]
+                            } );
+                        }else{
+                            $("#all_bill").html("จำนวนบิลทั้งหมด " + json.data.length + " บิล")
+                            Swal.fire({
+                                title:'ค้นหาไม่สำเร็จ',
+                                text:'ไม่พบข้อมูล',
+                                icon:'error'
+                            })
+            
+                        }
                     }
                 })
             }
@@ -318,7 +311,7 @@
                 var HKUNRG = $("#HKUNRG").val();
                 var LBRNCH = $("#LBRNCH").val();
                 var HBRNCH = $("#HBRNCH").val();
-                var LDOCTYPE = $("#LDOCTYPE").val();
+                var LDOCTYPE = $("#DOCTYPE").val(); 
                 var HDOCTYPE = $("#HDOCTYPE").val();
                  
         

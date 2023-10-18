@@ -6,7 +6,9 @@ package utility;
 
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -15,14 +17,39 @@ import java.util.Locale;
  */
 public class Utility {
 
+    public static List<String> SetListType(String type) {
+        List<String> list = new ArrayList<String>();
+        try {
+            if (type.equals("ALL")) {
+                list.add("T03");
+                list.add("80");
+                list.add("81");
+                list.add("388");
+            } else if (type.equals("80")) {
+                list.add("80");
+            } else if (type.equals("81")) {
+                list.add("81");
+            } else if (type.equals("388")) {
+                list.add("388");
+            } else if (type.equals("T03")) {
+                list.add("T03");
+            }
+
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+
     public static String ChackNull(String txt) {
         if (txt == null) {
             txt = "";
         }
         return txt;
     }
-
-
 
     public static String CoverDateForInput(String txt) {
 

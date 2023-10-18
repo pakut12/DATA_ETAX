@@ -18,7 +18,7 @@ public class SapService {
     
     
 
-    public static JSONObject GetDataEtaxFromSap(String BUKRS, String LBLDAT, String HBLDAT, String LKUNRG, String HKUNRG, String LBRNCH, String HBRNCH, String LDOCTYPE, String HDOCTYPE) {
+    public static JSONObject GetDataEtaxFromSap(String BUKRS, String LBLDAT, String HBLDAT, String LBRNCH, String HBRNCH) {
         JSONObject txtjson = new JSONObject();
         try {
             JCO.Client client = ConnectSap.createpool();
@@ -35,12 +35,8 @@ public class SapService {
             input1.setValue(BUKRS, "BUKRS");
             input1.setValue(LBLDAT, "LBLDAT");
             input1.setValue(HBLDAT, "HBLDAT");
-            input1.setValue(LKUNRG, "LKUNRG");
-            input1.setValue(HKUNRG, "HKUNRG");
             input1.setValue(LBRNCH, "LBRNCH");
             input1.setValue(HBRNCH, "HBRNCH");
-            input1.setValue(LDOCTYPE, "LDOCTYPE");
-            input1.setValue(HDOCTYPE, "HDOCTYPE");
             client.execute(function1);
 
             //System.out.println(function1);
