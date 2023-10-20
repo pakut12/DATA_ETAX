@@ -49,6 +49,23 @@
             </div>
         </div>
         
+        <div class="modal fade" id="modal_manual" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">คู่มือ DATA ETAX</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <iframe src="DATA_ETAX.pdf" style="width:100%; height:60vh;" frameborder="1"></iframe>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
         <div class="mx-5">
             <div class="text-center h1 fw-bold mt-3">
                 GET DATA ETAX
@@ -97,6 +114,10 @@
                                         &nbsp;&nbsp;
                                         <button class="btn btn-sm btn-primary w-50" type="button" onclick="getuserpassetax()">ดูรหัสผ่าน  One-Etax </button>
                                     </div>
+                                    <div class="d-flex justify-content-center mt-2">
+                                        <button class="btn btn-sm btn-secondary w-100" type="button" onclick="$('#modal_manual').modal('show')">คู่มือ DATA ETAX</button>
+                                    </div>
+                                    
                                 </div>
                                 
                                 
@@ -116,10 +137,16 @@
                                 <div class="text-end fw-bold  h4" id="all_bill"></div>
                             </div>
                             
-                            <table class="table text-nowrap table-bordered table-sm w-100" id="table_etax_sum"></table>
-                            
+                            <table class="table text-nowrap table-bordered table-sm w-100" id="table_etax_sum">
+                                
+                            </table>
+                            <br>
+                            <div class="text-center fw-bold" id='tb_fullsum'>
+                                
+                            </div>
                         </div>
                     </div>
+                    
                 </div>
             </div>
             <%@ include file="share/footer.jsp" %>
@@ -191,7 +218,8 @@
                         LBLDAT:LBLDAT,
                         HBLDAT: HBLDAT,
                         LBRNCH:LBRNCH,
-                        HBRNCH:HBRNCH
+                        HBRNCH:HBRNCH,
+                        DOCTYPE:DOCTYPE
                     },
                     success:function(url){
                         Swal.close()
@@ -223,7 +251,7 @@
                         linkElem.href = link;
                         linkElem.download = fileName; // Set the 'download' attribute to specify the file name
                         linkElem.click();
-                       // window.open("https://etax.one.th/portal/login")
+                        // window.open("https://etax.one.th/portal/login")
                     }
                 })
             }
@@ -254,8 +282,10 @@
                     },
                     success:function(msg){
                         Swal.close()
-                        console.log(msg)
+                        
                         var json = JSON.parse(msg)
+                     
+                        console.log(msg)
                         if(msg && json.data.length > 0){
                             
                             Swal.fire({
@@ -263,11 +293,36 @@
                                 text:'พบข้อมูล ' +json.data.length + ' บิล',
                                 icon:'success'
                             })
-            
                             
-                            console.log(json)
+                            $("#BASICAMTTOTAL").text(json.BASICAMT_TOTAL);
+                            $("#TAXAMTTOTAL").text(json.TAXAMT_TOTAL);
+                            $("#GRANDAMTTOTAL").text(json.GRANDAMT_TOTAL);
+                            
                             $("#all_bill").html("<p>จำนวนบิลทั้งหมด </p><p class='text-success'>" + json.data.length + "</p> บิล");
-                            $('#table_etax_sum').DataTable( {
+                            
+                            var html = "<div class='text-center fw-bold h4'>ยอดรวมทั้งหมด</div>";
+                            html +=  "<table class='table text-nowrap table-bordered table-sm w-100'>";
+                            html += "<thead>";
+                            html += "<tr>";
+                            html += "<th>BASICAMT_TOTAL</th>";
+                            html += "<th>TAXAMT_TOTAL</th>";
+                            html += "<th>GRANDAM_TTOTAL</th>";
+                            html += "</tr>";
+                            html += "</thead>";
+                            html += "<tbody>";
+                            html += "<tr>";
+                            html += "<td>"+json.BASICAMT_TOTAL+"</td>";
+                            html += "<td>"+json.TAXAMT_TOTAL+"</td>";
+                            html += "<td>"+json.GRANDAMT_TOTAL+"</td>";
+                            html += "</tr>";
+                            html += "</tbody>";
+                            html += " </table>";
+            
+            
+            $("#tb_fullsum").html(html)
+            
+                            $('#table_etax_sum').DataTable({
+                                lengthMenu: [[10, 25, 50,100,-1], [10, 25, 50,100 ,"All"]],
                                 dom: 'Bfrtip',
                                 buttons: [
                                     'pageLength',
@@ -287,8 +342,10 @@
                                 columns:json.datacols,
                                 scrollX: true,
                                 destroy: true,
-                                order: [[3,'asc']]
-                            } );
+                                order: [[2,'asc']]
+                            });
+                            
+
                         }else{
                             $("#all_bill").html("จำนวนบิลทั้งหมด " + json.data.length + " บิล")
                             Swal.fire({
@@ -298,6 +355,8 @@
                             })
             
                         }
+                        
+
                     }
                 })
             }
@@ -364,7 +423,7 @@
                             columns:json.datacol,
                             scrollX: true,
                             destroy: true,
-                            order: [[3,'asc']]
+                            order: [[2,'asc']]
                         } );
                         
 

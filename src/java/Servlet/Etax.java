@@ -6,10 +6,14 @@ package Servlet;
 
 import java.io.*;
 
+import java.text.DecimalFormat;
 import java.util.*;
+import java.util.ArrayList;
+import java.util.logging.SimpleFormatter;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import model.MD_Etax;
+import org.apache.poi.ss.formula.functions.Dec2Bin;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import service.EtaxService;
@@ -59,9 +63,23 @@ public class Etax extends HttpServlet {
                     String HBLDAT = request.getParameter("HBLDAT").trim();
                     String LBRNCH = request.getParameter("LBRNCH").trim();
                     String HBRNCH = request.getParameter("HBRNCH").trim();
+                    String DOCTYPE = request.getParameter("DOCTYPE").trim();
 
+                    List<String> TYPE = Utility.SetListType(DOCTYPE);
                     List<MD_Etax> listetax = EtaxService.GetAllListEtax(BUKRS, LBLDAT, HBLDAT, LBRNCH, HBRNCH);
-                    List<List<String>> list = EtaxService.SaveCsvEtax(listetax);
+
+                    System.out.println(listetax.size());
+                    List<MD_Etax> listbytype = new ArrayList<MD_Etax>();
+
+                    System.out.println("DOCTYPE : " + DOCTYPE);
+                    for (MD_Etax t : listetax) {
+                        if (TYPE.contains(t.getDOCTYPE())) {
+                            System.out.println("getDOCTYPE : " + t.getDOCTYPE());
+                            listbytype.add(t);
+                        }
+                    }
+
+                    List<List<String>> list = EtaxService.SaveCsvEtax(listbytype);
 
                     JSONArray arr = new JSONArray();
                     for (List<String> LS : list) {
@@ -98,7 +116,12 @@ public class Etax extends HttpServlet {
                     List<MD_Etax> listetax = EtaxService.GetAllListEtax(BUKRS, LBLDAT, HBLDAT, LBRNCH, HBRNCH);
                     List<MD_Etax> listsum = EtaxService.GetAllSumListEtax(listetax);
 
+
                     JSONArray data = new JSONArray();
+
+                    double BASICAMT_TOTAL = 0;
+                    double TAXAMT_TOTAL = 0;
+                    double GRANDAMT_TOTAL = 0;
 
                     for (MD_Etax m : listsum) {
 
@@ -109,7 +132,7 @@ public class Etax extends HttpServlet {
                             System.out.println(TYPE);
                             if (TYPE.contains(m.getDOCTYPE())) {
 
-                                System.out.println("TEST : 1");
+
                                 JSONObject obj = new JSONObject();
                                 obj.put("BLDAT", m.getBLDAT());
                                 obj.put("DOCID", m.getDOCID());
@@ -122,25 +145,31 @@ public class Etax extends HttpServlet {
                                 obj.put("TAXAMT", m.getTAXAMT());
                                 obj.put("GRANDAMT", m.getGRANDAMT());
                                 data.put(obj);
+
+                                BASICAMT_TOTAL += Double.parseDouble(m.getBASICAMT());
+                                TAXAMT_TOTAL += Double.parseDouble(m.getTAXAMT());
+                                GRANDAMT_TOTAL += Double.parseDouble(m.getGRANDAMT());
+
+
                             }
 
                         }
 
 
-                    /*
-                    System.out.println("---------------------------------------------------");
-                    System.out.println("BLDAT : " + m.getBLDAT());
-                    System.out.println("DOCID : " + m.getDOCID());
-                    System.out.println("SBRANCH : " + m.getSBRANCH());
-                    System.out.println("DOCTYPE : " + m.getDOCTYPE());
-                    System.out.println("DOCNAME : " + m.getDOCNAME());
-                    System.out.println("KUNRG : " + m.getKUNRG());
-                    System.out.println("STAXID : " + m.getSTAXID());
-                    System.out.println("BASICAMT : " + m.getBASICAMT());
-                    System.out.println("TAXAMT : " + m.getTAXAMT());
-                    System.out.println("GRANDAMT : " + m.getGRANDAMT());
-                    System.out.println("---------------------------------------------------");
-                     */
+
+                        System.out.println("---------------------------------------------------");
+                        System.out.println("BLDAT : " + m.getBLDAT());
+                        System.out.println("DOCID : " + m.getDOCID());
+                        System.out.println("SBRANCH : " + m.getSBRANCH());
+                        System.out.println("DOCTYPE : " + m.getDOCTYPE());
+                        System.out.println("DOCNAME : " + m.getDOCNAME());
+                        System.out.println("KUNRG : " + m.getKUNRG());
+                        System.out.println("STAXID : " + m.getSTAXID());
+                        System.out.println("BASICAMT : " + m.getBASICAMT());
+                        System.out.println("TAXAMT : " + m.getTAXAMT());
+                        System.out.println("GRANDAMT : " + m.getGRANDAMT());
+                        System.out.println("---------------------------------------------------");
+
                     }
 
                     JSONArray datacol = new JSONArray();
@@ -155,9 +184,16 @@ public class Etax extends HttpServlet {
 
                     }
 
+                    DecimalFormat df = new DecimalFormat("#,###.00");
+
+
                     JSONObject outputdata = new JSONObject();
                     outputdata.put("data", data);
                     outputdata.put("datacols", datacol);
+                    outputdata.put("BASICAMT_TOTAL", df.format(BASICAMT_TOTAL));
+                    outputdata.put("TAXAMT_TOTAL", df.format(TAXAMT_TOTAL));
+                    outputdata.put("GRANDAMT_TOTAL", df.format(GRANDAMT_TOTAL));
+
 
                     out.print(outputdata);
 
